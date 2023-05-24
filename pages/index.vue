@@ -1,3 +1,7 @@
 <template>
-  <h1>Index page</h1>
+  <PageContainer />
 </template>
+
+<script setup>
+const { data: content } = await useFetch('/api/hello')
+</script>
