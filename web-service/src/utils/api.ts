@@ -1,5 +1,7 @@
 //import { Paths } from "v-network-graph";
 
+import axios from "axios";
+
 export const remoteFetchOptions = (
   keyword: string,
   params: { isLoading: boolean; options: any; [key: string]: any }
@@ -7,14 +9,14 @@ export const remoteFetchOptions = (
   if (keyword) {
     params.isLoading = true;
 
-    fetch("api/esscd/filter", {
+    axios({
       method: "post",
+      url: "api/esscd/filter",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ keyword, filterType: params.filterType }),
+      data: { keyword, filterType: params.filterType },
     })
-      .then((response) => response.json())
       .then((jsonResponse) => {
-        const results = jsonResponse.results;
+        const results = jsonResponse.data.results;
         params.options = results.map((result: string) => {
           return { key: result, label: result, value: result };
         });
@@ -29,14 +31,13 @@ export const remoteFetchOptions = (
 
 export const remoteFetchSystemDiagram = (params: any, diagramData: any) => {
   if (params.filterLevel === "all") {
-    fetch("api/esscd/diagram", {
+    axios({
       method: "get",
+      url: "api/esscd/diagram",
       headers: { "content-type": "application/json" },
-    })
-      .then((response) => response.json())
-      .then((jsonResponse) => {
-        diagramData.value = jsonResponse;
-      });
+    }).then((jsonResponse) => {
+      diagramData.value = jsonResponse.data;
+    });
     return;
   } else if (params.selectedValues.length === 0) {
     diagramData.value = undefined;
@@ -45,19 +46,18 @@ export const remoteFetchSystemDiagram = (params: any, diagramData: any) => {
 
   const selectedValues: string[] = params.selectedValues; // mostly they are strings
 
-  fetch("api/esscd/diagram", {
+  axios({
     method: "post",
+    url: "api/esscd/diagram",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({
+    data: {
       selectedValues: selectedValues,
       filterType: params.filterType,
       filterLevel: params.filterLevel,
-    }),
-  })
-    .then((response) => response.json())
-    .then((jsonResponse) => {
-      diagramData.value = jsonResponse;
-    });
+    },
+  }).then((jsonResponse) => {
+    diagramData.value = jsonResponse.data;
+  });
 };
 
 // THIS IS FOR SHORTEST PATH SEARCHING //////////////////////////////
