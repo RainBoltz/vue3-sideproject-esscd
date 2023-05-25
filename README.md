@@ -1,42 +1,38 @@
-# Nuxt 3 Minimal Starter
+# Vue 3 side project: ESSCD
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
-## Setup
-
-Make sure to install the dependencies:
-
+## 1. web-service
+used to render the web page for clients.
+### requirements
+- Node.js >= 14
+- NPM == 6.14.5
+- Vue.js >= 3.0 (with Typescript)
+### how to run
 ```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install
+cd web-service
+npm run serve
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`
-
+## 2. api-service
+used to provide the data for web-service.
+### requirements:
+- Java Runtime >= 8
+- Spring Boot >= 2.0.0
+- Maven >= 3.5.3
+- Spring MVC
+- Docker >= 20
+- minikube >= 1.24.0
+### how to run
 ```bash
-npm run dev
+cd api-service/esscd
+./mvnw spring-boot:run
 ```
-
-## Production
-
-Build the application for production:
-
+### how to deploy
 ```bash
-npm run build
+minikube start
+
+# if exists, delete the old one
+kubectl delete pods esscd-deployment
+
+cd api-service
+./deploy.sh
 ```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
